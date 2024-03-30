@@ -12,13 +12,15 @@ def transform(df):
     df = df.dropna(subset=["Tech Stack"]) # Menghapus null value
     df['Posted On'] = pd.to_datetime(df['Posted On'], format='ISO8601') # Mengganti tipe data untuk kolom 'Posted On'
     df['Tech Stack'] = df['Tech Stack'].str.split(', ') # Explode data
-    df = df.explode('Tech Stack')
-    return load(df)
+    df_exploded = df.explode('Tech Stack')
+    return load(df, df_exploded)
 
-def load(df):
+def load(df, df_exploded):
     dir = os.getcwd()
     path = os.path.join(dir, 'cleaned_joblist.csv')
+    path_exploded = os.path.join(dir, 'cleaned_joblist - exploded.csv')
     df.to_csv(path, index=False)
+    df_exploded.to_csv(path_exploded, index=False)
     print("File telah disimpan di direktori saat ini.")
 
 if __name__ =="__main__":
